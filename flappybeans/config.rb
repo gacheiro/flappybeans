@@ -9,9 +9,9 @@ module Flappy
   VEL_X = 2
   MAX_VEL_Y = 8
   MAX_VEL_X = 5
-  GRAVITY = 1
+  GRAVITY = 0.8
   # Spacing beetween top and bottom obstacles
-  OBSTACLE_VSPACING = 100
+  OBSTACLE_VSPACING = 120
   # Debug game objects' bodies
   DEBUG = false
 

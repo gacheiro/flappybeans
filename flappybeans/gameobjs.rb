@@ -12,8 +12,7 @@ module Flappy
     end
 
     def flap
-      @vel_y = -10
-      @angle = -45
+      @vel_y = -9
     end
 
     def falling?
@@ -32,7 +31,7 @@ module Flappy
 
     def draw
       # The draw_rot centers the image at (x, y)
-      @image.draw_rot(@x, @y, @z, @angle)
+      @image.draw_rot(@x, @y, @z, 0)
     end
 
     def rect
@@ -40,14 +39,6 @@ module Flappy
       # We need to calculate the top-left corner
       [@x - width/2, @y - height/2, width, height]
     end
-
-    private
-
-      def update_gravity
-        super
-        # Normalize angle
-        @angle = @angle > 10 ? 10 : @angle + 4.5
-      end
   end
 
   class Obstacle < Sprite
@@ -60,13 +51,9 @@ module Flappy
     end
   end
 
-  class Floor < Sprite
+  class Floor < Obstacle
     def initialize(x, y, z, image)
-      super(image: image,
-            x: x,
-            y: y,
-            z: z,
-            vel_x: -Flappy::VEL_X)
+      super(x, y, z, image)
     end
   end
 
