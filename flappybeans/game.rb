@@ -11,7 +11,7 @@ module Flappy
 
       @background_image = Flappy::IMAGES[:background]
       # Game objects
-      @player = Flappy::FlappyBean.new(width/2, height/2)
+      @player = create_player
       @obstacles = []
       @stars = []
       @floor = []
@@ -85,37 +85,38 @@ module Flappy
         @player.vel_x = @player.vel_y = 0
       end
 
+      def create_player
+        x = self.width/2
+        y = self.height/2
+        z = Flappy::Z[:player] 
+        frames = Flappy::IMAGES[:player]
+        Flappy::FlappyBean.new(x, y, z, frames)
+      end
+
       def create_obstacle
         offset_x =
           if @obstacles.empty?
             # Create first obstacle at the right border
             self.width
           else
+            # Take care not to create and obstacle on top of another
             @obstacles.last.x
           end
+
         # Place the obstacle at a random position
         x = offset_x + rand(200..250)
         y = rand(-225..0)
-        # Create the top and bottom obstacles
+        z = Flappy::Z[:obstacle]
+        # Spacing beetween top and bottom obstacles
         v_spacing = Flappy::OBSTACLE_VSPACING
-        top = Flappy::Obstacle.new(x, y, :top)
-        bottom = Flappy::Obstacle.new(x, y + top.height + v_spacing, :bottom)
-        [top, bottom]
-      end
 
-      def cleanup_obstacles
-        @obstacles.reject! { | obstacle | obstacle.x < -100}
-      end
-
-      def create_star
-        x = rand(self.width..self.height*2)
-        y = rand(0..250)
-        vel_x = -rand(5..10)/10.0
-        Flappy::Star.new(x, y, vel_x)
-      end
-
-      def cleanup_stars
-        @stars.reject! { | star | star.x < -20 }
+        # Create random looking obstacles
+        top = Flappy::IMAGES[:obstacle_top].sample
+        bottom = Flappy::IMAGES[:obstacle_bottom].sample
+        return [
+          Flappy::Obstacle.new(x, y, z, top),
+          Flappy::Obstacle.new(x, y + top.height + v_spacing, z, bottom)
+        ]
       end
 
       def create_floor
@@ -126,12 +127,30 @@ module Flappy
           else
             @floor.last.x + width - 1
           end
-        Flappy::Floor.new(x, self.height - 60)
+          y = self.height - 60
+          z = Flappy::Z[:floor]
+        Flappy::Floor.new(x, y, z, Flappy::IMAGES[:floor])
+      end
+
+      def create_star
+        x = rand(self.width..self.height*2)
+        y = rand(0..250)
+        z = Flappy::Z[:star]
+        vel_x = -rand(5..10)/10.0
+        Flappy::Star.new(x, y, z, Flappy::IMAGES[:star], vel_x)
+      end
+
+      def cleanup_obstacles
+        @obstacles.reject! { | obstacle | obstacle.x < -100}
       end
 
       def cleanup_floor
         sprite_width = Flappy::IMAGES[:floor].width
         @floor.reject! { | floor | floor.x < -sprite_width }
+      end
+
+      def cleanup_stars
+        @stars.reject! { | star | star.x < -20 }
       end
   end
 end

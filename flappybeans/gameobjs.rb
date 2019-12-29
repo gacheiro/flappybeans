@@ -2,12 +2,12 @@ require_relative 'ext/sprite'
 
 module Flappy
   class FlappyBean < Sprite
-    def initialize(x, y)
-      @frames = Flappy::IMAGES[:player]
+    def initialize(x, y, z, frames)
+      @frames = frames
       super(image: @frames.first,
             x: x,
             y: y,
-            z: Flappy::Z[:player],
+            z: z,
             allow_gravity: true)
     end
 
@@ -51,42 +51,31 @@ module Flappy
   end
 
   class Obstacle < Sprite
-    def initialize(x, y, type)
-      @type = type
-      image =
-        if top?
-          Flappy::IMAGES[:obstacle_top].sample
-        else
-          Flappy::IMAGES[:obstacle_bottom].sample
-        end
+    def initialize(x, y, z, image)
       super(image: image,
             x: x,
             y: y,
-            z: Flappy::Z[:obstacle],
+            z: z,
             vel_x: -Flappy::VEL_X)
-    end
-
-    def top?
-      @type == :top
     end
   end
 
   class Floor < Sprite
-    def initialize(x, y)
-      super(image: Flappy::IMAGES[:floor],
+    def initialize(x, y, z, image)
+      super(image: image,
             x: x,
             y: y,
-            z: Flappy::Z[:floor],
+            z: z,
             vel_x: -Flappy::VEL_X)
     end
   end
 
   class Star < Sprite
-    def initialize(x, y, vel_x)
+    def initialize(x, y, z, image, vel_x)
       super(image: Flappy::IMAGES[:star],
             x: x,
             y: y,
-            z: Flappy::Z[:background],
+            z: z,
             vel_x: vel_x)
     end
   end
