@@ -32,5 +32,11 @@ module Flappy
       # Return a rect (left, top, width, height)
       [x, y, width, height]
     end
+
+    def destroy?
+      # Destroy sprites that crossed the left border
+      # of the screen and are no longer visible
+      @x < -width
+    end
   end
 end

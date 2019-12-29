@@ -37,22 +37,13 @@ module Flappy
         @floor << create_floor
       end
 
-      # Check collision beetween player and obstacles
-      @obstacles.each do |obstacle|
-        next unless obstacle.collide?(@player)
-        game_over
-      end
-
-      # Check collision beetween player and floor
-      @floor.each do |floor|
-        next unless floor.collide?(@player)
-        game_over
+      # Check collision beetween player and obstacles and floor
+      (@obstacles + @floor).each do |obj|
+        game_over if obj.collide?(@player)
       end
 
       # Clean up old gameobjs
-      cleanup_obstacles
-      cleanup_stars
-      cleanup_floor
+      cleanup_gameobjects
     end
 
     def draw
@@ -127,8 +118,8 @@ module Flappy
           else
             @floor.last.x + width - 1
           end
-          y = self.height - 60
-          z = Flappy::Z[:floor]
+        y = self.height - 60
+        z = Flappy::Z[:floor]
         Flappy::Floor.new(x, y, z, Flappy::IMAGES[:floor])
       end
 
@@ -140,17 +131,10 @@ module Flappy
         Flappy::Star.new(x, y, z, Flappy::IMAGES[:star], vel_x)
       end
 
-      def cleanup_obstacles
-        @obstacles.reject! { | obstacle | obstacle.x < -100}
-      end
-
-      def cleanup_floor
-        sprite_width = Flappy::IMAGES[:floor].width
-        @floor.reject! { | floor | floor.x < -sprite_width }
-      end
-
-      def cleanup_stars
-        @stars.reject! { | star | star.x < -20 }
+      def cleanup_gameobjects
+        @obstacles.reject!(&:destroy?)
+        @floor.reject!(&:destroy?)
+        @stars.reject!(&:destroy?)
       end
   end
 end

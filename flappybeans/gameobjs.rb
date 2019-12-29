@@ -72,7 +72,7 @@ module Flappy
 
   class Star < Sprite
     def initialize(x, y, z, image, vel_x)
-      super(image: Flappy::IMAGES[:star],
+      super(image: image,
             x: x,
             y: y,
             z: z,
