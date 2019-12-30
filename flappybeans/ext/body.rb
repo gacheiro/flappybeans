@@ -1,14 +1,12 @@
 module Flappy
   module Body
-    attr_accessor :x, :y, :vel_x, :vel_y, :angle
-    attr_accessor :allow_gravity
+    attr_accessor :x, :y, :vel_x, :vel_y, :allow_gravity
 
     def initialize_body(options = {})
       @x = options[:x] || 0
       @y = options[:y] || 0
       @vel_x = options[:vel_x] || 0
       @vel_y = options[:vel_y] || 0
-      @angle = options[:angle] || 0
       @allow_gravity = options[:allow_gravity] || false
     end
 

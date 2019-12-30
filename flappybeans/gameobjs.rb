@@ -62,19 +62,9 @@ module Flappy
     end
   end
 
-  class Star < Sprite
-    def initialize(x, y, z, image, vel_x)
-      super(image: image,
-            x: x,
-            y: y,
-            z: z,
-            vel_x: vel_x)
-    end
-  end
-
   class Scorable < Obstacle
     def initialize(x, y, image)
-      super x, y, 0, image
+      super(x, y, 0, image)
       @scored = false
     end
 

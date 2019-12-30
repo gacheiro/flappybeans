@@ -14,12 +14,11 @@ module Flappy
       # Game objects
       @player = create_player
       @obstacles = []
-      @stars = []
       @floor = []
     end
 
     def game_objects
-      [@player] + @obstacles + @floor + @stars
+      [@player] + @obstacles + @floor
     end
 
     def update
@@ -28,10 +27,6 @@ module Flappy
       # Create random obstacles
       if @obstacles.size < 20
         @obstacles += create_obstacle
-      end
-      # Create random stars
-      if rand(100) < 4 and @stars.size < 5
-        @stars << create_star
       end
       # Create floor (only need 2 to fill the screen horizontally)
       if @floor.count < 2
@@ -136,18 +131,9 @@ module Flappy
         Flappy::Floor.new(x, y, z, Flappy::IMAGES[:floor])
       end
 
-      def create_star
-        x = rand(self.width..self.height*2)
-        y = rand(0..250)
-        z = Flappy::Z[:star]
-        vel_x = -rand(5..10)/10.0
-        Flappy::Star.new(x, y, z, Flappy::IMAGES[:star], vel_x)
-      end
-
       def cleanup_gameobjects
         @obstacles.reject!(&:destroy?)
         @floor.reject!(&:destroy?)
-        @stars.reject!(&:destroy?)
       end
   end
 end
