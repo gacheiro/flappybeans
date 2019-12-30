@@ -7,6 +7,7 @@ module Flappy
     def initialize(width, height, caption)
       super width, height
       self.caption = caption
+      @score = 0
       @game_over = false
 
       @background_image = Flappy::IMAGES[:background]
@@ -25,7 +26,7 @@ module Flappy
       game_objects.each(&:update)
 
       # Create random obstacles
-      if @obstacles.size < 10
+      if @obstacles.size < 20
         @obstacles += create_obstacle
       end
       # Create random stars
@@ -39,7 +40,15 @@ module Flappy
 
       # Check collision beetween player and obstacles and floor
       (@obstacles + @floor).each do |obj|
-        game_over if obj.collide?(@player)
+        if obj.collide?(@player)
+          case obj.on_collide
+          when :kill
+            game_over
+          when :score
+            @score += obj.score!
+            puts @score
+          end
+        end
       end
 
       # Clean up old gameobjs
@@ -104,9 +113,13 @@ module Flappy
         # Create random looking obstacles
         top = Flappy::IMAGES[:obstacle_top].sample
         bottom = Flappy::IMAGES[:obstacle_bottom].sample
+        # Also create an (invisible) scorable obstacle
+        # Which will increase player's score on collide
+        scorable = Flappy::IMAGES[:score_obstacle]
         return [
           Flappy::Obstacle.new(x, y, z, top),
-          Flappy::Obstacle.new(x, y + top.height + v_spacing, z, bottom)
+          Flappy::Scorable.new(x + top.width, y + top.height, scorable),
+          Flappy::Obstacle.new(x, y + top.height + v_spacing, z, bottom),
         ]
       end
 

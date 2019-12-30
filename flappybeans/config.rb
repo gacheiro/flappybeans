@@ -20,6 +20,7 @@ module Flappy
     :player => ["assets/fbs-10.png", "assets/fbs-11.png"],
     :obstacle_top => ["assets/fbs-05.png", "assets/fbs-07.png"],
     :obstacle_bottom => ["assets/fbs-06.png", "assets/fbs-08.png"],
+    :score_obstacle => "assets/fbs-52.bmp",
     :background => "assets/fbs-49.png",
     :floor => "assets/fbs-04.png",
     :cloud => "assets/fbs-50.png",

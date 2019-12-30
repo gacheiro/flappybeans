@@ -49,6 +49,11 @@ module Flappy
             z: z,
             vel_x: -Flappy::VEL_X)
     end
+
+    def on_collide
+      # Kill the player on collide
+      :kill
+    end
   end
 
   class Floor < Obstacle
@@ -64,6 +69,27 @@ module Flappy
             y: y,
             z: z,
             vel_x: vel_x)
+    end
+  end
+
+  class Scorable < Obstacle
+    def initialize(x, y, image)
+      super x, y, 0, image
+      @scored = false
+    end
+
+    def score!
+      @scored = true
+      1
+    end
+
+    def on_collide
+      # Increace the player's score on collide
+      :score
+    end
+
+    def destroy?
+      @scored
     end
   end
 end
