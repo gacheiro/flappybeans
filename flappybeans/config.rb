@@ -23,6 +23,18 @@ module Flappy
     :score_obstacle => "assets/fbs-52.bmp",
     :background => "assets/fbs-49.png",
     :floor => "assets/fbs-04.png",
+    :digits => [
+      "assets/fbs-35.png",
+      "assets/fbs-36.png",
+      "assets/fbs-37.png",
+      "assets/fbs-38.png",
+      "assets/fbs-39.png",
+      "assets/fbs-40.png",
+      "assets/fbs-41.png",
+      "assets/fbs-42.png",
+      "assets/fbs-43.png",
+      "assets/fbs-44.png",
+    ]
   }
   # Load the images into Gosu::Image instances
   IMAGES = {}

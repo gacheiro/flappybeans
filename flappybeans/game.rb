@@ -53,6 +53,7 @@ module Flappy
     def draw
       @background_image.draw(0, 0, Flappy::Z[:background])
       game_objects.each(&:draw)
+      draw_score
       debug_bodies if Flappy::DEBUG
     end
 
@@ -64,15 +65,29 @@ module Flappy
       end
     end
 
-    def debug_bodies
-      game_objects.each do |obj|
-        x, y, width, height = obj.rect
-        z = Flappy::Z[:debug]
-        Gosu::draw_rect(x, y, width, height, Gosu::Color::GREEN, z)
-      end
-    end
-
     private
+
+      def draw_score
+        # Draw the player's score using digit images
+        digits = Flappy::IMAGES[:digits]
+        dwidth = 15
+        # Center the score at width/2
+        size = @score.to_s.size
+        x = self.width/2 - size*dwidth/2
+        # Draw each digit individually
+        @score.to_s.each_char do |d|
+          digits[d.to_i].draw(x, 30, Flappy::Z[:ui])
+          x += dwidth
+        end
+      end
+
+      def debug_bodies
+        game_objects.each do |obj|
+          x, y, width, height = obj.rect
+          z = Flappy::Z[:debug]
+          Gosu::draw_rect(x, y, width, height, Gosu::Color::GREEN, z)
+        end
+      end
 
       def game_over
         @game_over = true
