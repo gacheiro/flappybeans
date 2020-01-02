@@ -11,8 +11,11 @@ module Flappy
       @game_over = false
 
       @background_image = Flappy::IMAGES[:background]
-      # Game objects
+      # Create player
       @player = create_player
+      offset = @player.height/2
+      @player.set_bounds top: offset, bottom: height - 55 - offset
+      # Game objects
       @obstacles = []
       @floor = []
     end
@@ -38,7 +41,7 @@ module Flappy
         if obj.collide?(@player)
           case obj.on_collide
           when :kill
-            game_over
+            game_over! unless @game_over
           when :score
             @score += obj.score!
             puts @score
@@ -89,10 +92,9 @@ module Flappy
         end
       end
 
-      def game_over
+      def game_over!
         @game_over = true
-        @player.allow_gravity = false
-        @player.vel_x = @player.vel_y = 0
+        @player.vel_y = 0
       end
 
       def create_player

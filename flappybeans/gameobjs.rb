@@ -20,7 +20,15 @@ module Flappy
     end
 
     def update
-      super
+      super      
+      # FlappyBean can not cross top, bottom of the screen
+      unless @bounds.nil?
+        top, bottom = @bounds[:top],
+                      @bounds[:bottom]
+        @y = [top, @y].max unless top.nil?
+        @y = [bottom, @y].min unless bottom.nil?
+      end
+      # Update FlappyBean's image
       @image =
         if falling?
           @frames.last
@@ -38,6 +46,13 @@ module Flappy
       # FlappyBean sprite's is centered at (x, y)
       # We need to calculate the top-left corner
       [@x - width/2, @y - height/2, width, height]
+    end
+
+    def set_bounds(bounds)
+      # Limit the min (top) and max (bottom) y pos.
+      # Usage:
+      # @player.bounds top: 0, bottom: 500
+      @bounds = bounds
     end
   end
 
